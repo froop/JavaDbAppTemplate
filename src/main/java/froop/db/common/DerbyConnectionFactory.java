@@ -25,12 +25,7 @@ public class DerbyConnectionFactory {
     this.connectUrl = connectUrl;
   }
 
-  public Connection getConnection() {
-    try {
-      Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
-      return DriverManager.getConnection(connectUrl);
-    } catch (ClassNotFoundException | SQLException e) {
-      throw new IllegalStateException(e);
-    }
+  public Connection getConnection() throws SQLException {
+    return DriverManager.getConnection(connectUrl);
   }
 }
