@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE project>
+<project basedir="." default="db">
+  <property environment="osenv" />
+  <property name="db.src.dir" value="src/main/db" />
+  <property name="db.ddl.dir" value="${db.src.dir}" />
+  <property name="derby.dir" value="data/derby" />
+  <property name="db.driver" value="org.apache.derby.jdbc.EmbeddedDriver" />
+  <property name="path.maven" value="${osenv.USERPROFILE}/.m2/repository" />
+
+  <property name="db.sample.dir" value="${derby.dir}/sample" />
+  <property name="db.sample.url" value="jdbc:derby:${db.sample.dir};create=true" />
+
+  <path id="db.classpath">
+    <fileset dir="${path.maven}/org/apache/derby/derby/10.10.2.0"
+        includes="derby*.jar" />
+  </path>
+
+  <target name="clean" depends="crean-db" />
+  <target name="db" depends="crean-db,create-sample-db" />
+
+  <target name="crean-db" depends="clean-sample-db">
+    <delete dir="${derby.dir}" />
+    <delete file="derby.log" />
+  </target>
+
+  <target name="create-sample-db" depends="clean-sample-db">
+    <antcall target="create-sample-db-table">
+      <param name="sql.file" value="sample.sql" />
+    </antcall>
+  </target>
+
+  <target name="clean-sample-db">
+    <delete dir="${db.sample.dir}" />
+  </target>
+
+  <target name="create-sample-db-table">
+    <antcall target="create-a-table">
+      <param name="db.url" value="${db.sample.url}" />
+    </antcall>
+  </target>
+  <target name="create-a-table">
+    <antcall target="execute-sql">
+      <param name="sql.path" value="${db.ddl.dir}/${sql.file}" />
+    </antcall>
+  </target>
+  <target name="execute-sql">
+    <sql driver="${db.driver}" url="${db.url}" userid="" password=""
+      classpathref="db.classpath" src="${sql.path}" encoding="utf-8" />
+  </target>
+</project>
