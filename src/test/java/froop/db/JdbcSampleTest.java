@@ -34,6 +34,14 @@ public class JdbcSampleTest extends DerbyDbTestCase {
 
   @Test
   public void testSelectNameById() throws SQLException {
-    assertThat(target.selectNameById("id1").get(), is("name1"));
+    assertThat(target.selectNameById(1).get(), is("name1"));
+  }
+
+  @Test
+  public void testUpdate() throws Exception {
+    target.update(1, "name1b");
+
+    IDataSet expected = createDataSet(this.getClass().getResourceAsStream("SampleUpdate.xml"));
+    assertEqualsTable(expected, "sample");
   }
 }

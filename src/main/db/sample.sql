@@ -1,5 +1,5 @@
 CREATE TABLE sample(
-  id CHAR(22) NOT NULL,
-  name VARCHAR(200) NOT NULL,
+  id INTEGER NOT NULL,
+  name VARCHAR(100) NOT NULL,
   PRIMARY KEY (id)
 );
