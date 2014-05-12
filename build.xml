@@ -13,13 +13,13 @@
 
   <path id="db.classpath">
     <fileset dir="${path.maven}/org/apache/derby/derby/10.10.2.0"
-        includes="derby*.jar" />
+             includes="derby*.jar" />
   </path>
 
-  <target name="clean" depends="crean-db" />
-  <target name="db" depends="crean-db,create-sample-db" />
+  <target name="clean" depends="clean-db" />
+  <target name="db" depends="clean-db,create-sample-db" />
 
-  <target name="crean-db" depends="clean-sample-db">
+  <target name="clean-db" depends="clean-sample-db">
     <delete dir="${derby.dir}" />
     <delete file="derby.log" />
   </target>
@@ -46,6 +46,6 @@
   </target>
   <target name="execute-sql">
     <sql driver="${db.driver}" url="${db.url}" userid="" password=""
-      classpathref="db.classpath" src="${sql.path}" encoding="utf-8" />
+        classpathref="db.classpath" src="${sql.path}" encoding="utf-8" />
   </target>
 </project>
