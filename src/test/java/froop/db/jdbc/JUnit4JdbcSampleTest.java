@@ -29,7 +29,7 @@ public class JUnit4JdbcSampleTest {
 
   public JUnit4JdbcSampleTest() throws ClassNotFoundException, DataSetException {
     this.dbUnit = new DBUnitForJUnit4(
-        new JdbcDatabaseTester("org.apache.derby.jdbc.EmbeddedDriver", "jdbc:derby:data/derby/sample", "", ""),
+        new JdbcDatabaseTester("org.apache.derby.jdbc.EmbeddedDriver", "jdbc:derby:data/derby/sample"),
         DatabaseOperation.CLEAN_INSERT, null, createDataSet(this.getClass().getResourceAsStream("Sample.xml")), null);
   }
 
