@@ -26,7 +26,7 @@
 
   <target name="create-sample-db" depends="clean-sample-db">
     <antcall target="create-sample-db-table">
-      <param name="sql.file" value="sample.sql" />
+      <param name="sql.file" value="sample/create-sample.sql" />
     </antcall>
   </target>
 
