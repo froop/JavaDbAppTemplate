@@ -2,7 +2,7 @@
 <!DOCTYPE project>
 <project basedir="." default="db">
   <property environment="osenv" />
-  <property name="db.src.dir" value="src/main/db" />
+  <property name="db.src.dir" value="src/main/sql" />
   <property name="db.ddl.dir" value="${db.src.dir}" />
   <property name="derby.dir" value="data/derby" />
   <property name="db.driver" value="org.apache.derby.jdbc.EmbeddedDriver" />
