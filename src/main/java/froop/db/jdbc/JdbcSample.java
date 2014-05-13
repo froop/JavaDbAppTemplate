@@ -6,6 +6,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Optional;
 
+/**
+ * JDBCでデータベースに直接アクセスするサンプル.
+ */
 public class JdbcSample {
   private static final String SQL_SELECT = "SELECT name FROM sample WHERE id=?";
   private static final String SQL_UPDATE = "UPDATE sample SET name=?  WHERE id=?";
