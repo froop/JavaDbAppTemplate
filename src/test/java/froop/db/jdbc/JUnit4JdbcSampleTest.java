@@ -18,7 +18,7 @@ public class JUnit4JdbcSampleTest {
 
   private JdbcSample target;
 
-  public JUnit4JdbcSampleTest() throws Exception {
+  public JUnit4JdbcSampleTest() {
     this.dbUnit = DerbyDBUnit.xmlDataSetOf("jdbc:derby:data/derby/sample", getStream("Sample.xml"));
   }
 

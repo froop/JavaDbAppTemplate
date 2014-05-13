@@ -16,12 +16,16 @@ import java.io.InputStream;
 
 public class DerbyDBUnit extends DBUnitForJUnit4 {
 
-  public static DerbyDBUnit xmlDataSetOf(String dbUrl, InputStream dataXml) throws ClassNotFoundException, DataSetException {
-    return new DerbyDBUnit(new JdbcDatabaseTester("org.apache.derby.jdbc.EmbeddedDriver", dbUrl),
-        DatabaseOperation.CLEAN_INSERT, null, createDataSet(dataXml), null);
+  public static DerbyDBUnit xmlDataSetOf(String dbUrl, InputStream dataXml) {
+    try {
+      return new DerbyDBUnit(new JdbcDatabaseTester("org.apache.derby.jdbc.EmbeddedDriver", dbUrl),
+          DatabaseOperation.CLEAN_INSERT, null, createDataSet(dataXml), null);
+    } catch (ClassNotFoundException | DataSetException e) {
+      throw new IllegalStateException(e);
+    }
   }
 
-  public DerbyDBUnit(IDatabaseTester databaseTester, DatabaseOperation setupOperation, DatabaseOperation tearDownOperation,
+  private DerbyDBUnit(IDatabaseTester databaseTester, DatabaseOperation setupOperation, DatabaseOperation tearDownOperation,
                      IDataSet dataSet, IOperationListener operationListener) {
     super(databaseTester, setupOperation, tearDownOperation, dataSet, operationListener);
   }
