@@ -2,6 +2,7 @@ package froop.db.testutil;
 
 import org.dbunit.IDatabaseTester;
 import org.dbunit.IOperationListener;
+import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.operation.DatabaseOperation;
 import org.junit.rules.ExternalResource;
@@ -84,4 +85,8 @@ public class DBUnitForJUnit4 extends ExternalResource {
     return tearDownOperation;
   }
 
+  public IDataSet getDatabaseDataSet() throws Exception {
+    IDatabaseConnection conn = databaseTester.getConnection();
+    return conn.createDataSet();
+  }
 }

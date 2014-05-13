@@ -1,10 +1,13 @@
 package froop.db.jdbc;
 
 import froop.db.testutil.DBUnitForJUnit4;
+import org.dbunit.Assertion;
 import org.dbunit.JdbcDatabaseTester;
 import org.dbunit.dataset.DataSetException;
 import org.dbunit.dataset.IDataSet;
+import org.dbunit.dataset.ITable;
 import org.dbunit.dataset.ReplacementDataSet;
+import org.dbunit.dataset.filter.DefaultColumnFilter;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.dbunit.operation.DatabaseOperation;
 import org.junit.Before;
@@ -40,18 +43,41 @@ public class JUnit4JdbcSampleTest {
     assertThat(target.selectNameById(1).get(), is("name1"));
   }
 
-//  @Test
-//  public void testUpdate() throws Exception {
-//    target.update(1, "name1b");
-//
-//    IDataSet expected = createDataSet(this.getClass().getResourceAsStream("SampleUpdate.xml"));
-//    assertEqualsTable(expected, "sample");
-//  }
+  @Test
+  public void testUpdate() throws Exception {
+    target.update(1, "name1b");
+
+    IDataSet expected = createDataSet(this.getClass().getResourceAsStream("SampleUpdate.xml"));
+    assertEqualsTable(expected, "sample");
+  }
 
   protected IDataSet createDataSet(InputStream stream) throws DataSetException {
     ReplacementDataSet dataSet = new ReplacementDataSet(
         new FlatXmlDataSetBuilder().build(stream));
     dataSet.addReplacementObject("[NULL]", null);
     return dataSet;
+  }
+
+  protected void assertEqualsTable(IDataSet expectedDataSet, String tableName)
+      throws Exception {
+    assertEqualsTable(expectedDataSet, tableName, null);
+  }
+
+  protected void assertEqualsTable(IDataSet expectedDataSet, String tableName,
+                                   String[] excludedColumns) throws Exception {
+    ITable expectedTable = expectedDataSet.getTable(tableName);
+    IDataSet databaseDataSet = dbUnit.getDatabaseDataSet();
+    ITable actualTable = databaseDataSet.getTable(tableName);
+    Assertion.assertEquals(
+        excludedColumnsTable(expectedTable, excludedColumns),
+        excludedColumnsTable(actualTable, excludedColumns));
+  }
+
+  private ITable excludedColumnsTable(ITable table, String[] excludedColumns)
+      throws DataSetException {
+    if (excludedColumns != null) {
+      return DefaultColumnFilter.excludedColumnsTable(table, excludedColumns);
+    }
+    return table;
   }
 }
