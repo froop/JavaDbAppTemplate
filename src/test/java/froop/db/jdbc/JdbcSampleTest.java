@@ -11,14 +11,14 @@ import java.sql.SQLException;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-public class JUnit4JdbcSampleTest {
+public class JdbcSampleTest {
 
   @Rule
   public final DerbyDBUnit dbUnit;
 
   private JdbcSample target;
 
-  public JUnit4JdbcSampleTest() {
+  public JdbcSampleTest() {
     this.dbUnit = DerbyDBUnit.xmlDataSetOf("jdbc:derby:data/derby/sample", toStream("Sample.xml"));
   }
 
