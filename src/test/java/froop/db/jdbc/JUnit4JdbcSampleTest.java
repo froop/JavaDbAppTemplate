@@ -19,7 +19,7 @@ public class JUnit4JdbcSampleTest {
   private JdbcSample target;
 
   public JUnit4JdbcSampleTest() {
-    this.dbUnit = DerbyDBUnit.xmlDataSetOf("jdbc:derby:data/derby/sample", getStream("Sample.xml"));
+    this.dbUnit = DerbyDBUnit.xmlDataSetOf("jdbc:derby:data/derby/sample", toStream("Sample.xml"));
   }
 
   @Before
@@ -36,10 +36,10 @@ public class JUnit4JdbcSampleTest {
   public void testUpdate() throws Exception {
     target.update(1, "name1b");
 
-    dbUnit.assertEqualsTable(getStream("SampleUpdate.xml"), "sample");
+    dbUnit.assertEqualsTable(toStream("SampleUpdate.xml"), "sample");
   }
 
-  private InputStream getStream(String name) {
-    return getClass().getResourceAsStream(name);
+  private InputStream toStream(String fileName) {
+    return getClass().getResourceAsStream(fileName);
   }
 }
