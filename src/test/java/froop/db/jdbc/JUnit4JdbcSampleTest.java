@@ -1,15 +1,6 @@
 package froop.db.jdbc;
 
-import froop.db.testutil.DBUnitForJUnit4;
-import org.dbunit.Assertion;
-import org.dbunit.JdbcDatabaseTester;
-import org.dbunit.dataset.DataSetException;
-import org.dbunit.dataset.IDataSet;
-import org.dbunit.dataset.ITable;
-import org.dbunit.dataset.ReplacementDataSet;
-import org.dbunit.dataset.filter.DefaultColumnFilter;
-import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
-import org.dbunit.operation.DatabaseOperation;
+import froop.db.testutil.DerbyDBUnit;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -23,14 +14,12 @@ import static org.junit.Assert.assertThat;
 public class JUnit4JdbcSampleTest {
 
   @Rule
-  public final DBUnitForJUnit4 dbUnit;
+  public final DerbyDBUnit dbUnit;
 
   private JdbcSample target;
 
-  public JUnit4JdbcSampleTest() throws ClassNotFoundException, DataSetException {
-    this.dbUnit = new DBUnitForJUnit4(
-        new JdbcDatabaseTester("org.apache.derby.jdbc.EmbeddedDriver", "jdbc:derby:data/derby/sample"),
-        DatabaseOperation.CLEAN_INSERT, null, createDataSet(this.getClass().getResourceAsStream("Sample.xml")), null);
+  public JUnit4JdbcSampleTest() throws Exception {
+    this.dbUnit = DerbyDBUnit.xmlDataSetOf("jdbc:derby:data/derby/sample", getStream("Sample.xml"));
   }
 
   @Before
@@ -47,37 +36,10 @@ public class JUnit4JdbcSampleTest {
   public void testUpdate() throws Exception {
     target.update(1, "name1b");
 
-    IDataSet expected = createDataSet(this.getClass().getResourceAsStream("SampleUpdate.xml"));
-    assertEqualsTable(expected, "sample");
+    dbUnit.assertEqualsTable(getStream("SampleUpdate.xml"), "sample");
   }
 
-  protected IDataSet createDataSet(InputStream stream) throws DataSetException {
-    ReplacementDataSet dataSet = new ReplacementDataSet(
-        new FlatXmlDataSetBuilder().build(stream));
-    dataSet.addReplacementObject("[NULL]", null);
-    return dataSet;
-  }
-
-  protected void assertEqualsTable(IDataSet expectedDataSet, String tableName)
-      throws Exception {
-    assertEqualsTable(expectedDataSet, tableName, null);
-  }
-
-  protected void assertEqualsTable(IDataSet expectedDataSet, String tableName,
-                                   String[] excludedColumns) throws Exception {
-    ITable expectedTable = expectedDataSet.getTable(tableName);
-    IDataSet actualDataSet = dbUnit.getDatabaseDataSet();
-    ITable actualTable = actualDataSet.getTable(tableName);
-    Assertion.assertEquals(
-        excludedColumnsTable(expectedTable, excludedColumns),
-        excludedColumnsTable(actualTable, excludedColumns));
-  }
-
-  private ITable excludedColumnsTable(ITable table, String[] excludedColumns)
-      throws DataSetException {
-    if (excludedColumns != null) {
-      return DefaultColumnFilter.excludedColumnsTable(table, excludedColumns);
-    }
-    return table;
+  private InputStream getStream(String name) {
+    return getClass().getResourceAsStream(name);
   }
 }

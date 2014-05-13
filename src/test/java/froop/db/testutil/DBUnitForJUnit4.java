@@ -85,7 +85,7 @@ public class DBUnitForJUnit4 extends ExternalResource {
     return tearDownOperation;
   }
 
-  public IDataSet getDatabaseDataSet() throws Exception {
+  protected IDataSet getDatabaseDataSet() throws Exception {
     IDatabaseConnection conn = databaseTester.getConnection();
     return conn.createDataSet();
   }
