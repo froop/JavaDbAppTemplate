@@ -1,12 +1,10 @@
-package froop.db;
+package froop.db.jdbc;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Optional;
-
-import froop.db.common.DerbyConnectionFactory;
 
 public class JdbcSample {
   private static final String SQL_SELECT = "SELECT name FROM sample WHERE id=?";

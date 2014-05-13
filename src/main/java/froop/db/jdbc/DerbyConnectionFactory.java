@@ -1,4 +1,4 @@
-package froop.db.common;
+package froop.db.jdbc;
 
 import java.io.File;
 import java.sql.Connection;

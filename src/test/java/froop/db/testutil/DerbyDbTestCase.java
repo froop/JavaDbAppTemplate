@@ -1,4 +1,4 @@
-package froop.db;
+package froop.db.testutil;
 
 import java.io.InputStream;
 import java.sql.Connection;
@@ -13,7 +13,7 @@ import org.dbunit.dataset.ReplacementDataSet;
 import org.dbunit.dataset.filter.DefaultColumnFilter;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 
-import froop.db.common.DerbyConnectionFactory;
+import froop.db.jdbc.DerbyConnectionFactory;
 
 public abstract class DerbyDbTestCase extends DatabaseTestCase {
 
