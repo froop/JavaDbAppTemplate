@@ -16,10 +16,10 @@ public class JdbcSample {
   private final DerbyConnectionFactory factory = new DerbyConnectionFactory(
       "jdbc:derby:data/derby/sample");
 
-  public Optional<String> selectNameById(int id) throws SQLException {
+  public Optional<String> selectNameById(long id) throws SQLException {
     try (Connection conn = factory.getConnection();
         PreparedStatement stmt = conn.prepareStatement(SQL_SELECT)) {
-      stmt.setInt(1, id);
+      stmt.setLong(1, id);
       try (ResultSet rs = stmt.executeQuery()) {
         if (rs.next()) {
           return Optional.of(rs.getString("name"));
@@ -30,11 +30,11 @@ public class JdbcSample {
     }
   }
 
-  public void update(int id, String name) throws SQLException {
+  public void update(long id, String name) throws SQLException {
     try (Connection conn = factory.getConnection();
          PreparedStatement stmt = conn.prepareStatement(SQL_UPDATE)) {
       stmt.setString(1, name);
-      stmt.setInt(2, id);
+      stmt.setLong(2, id);
       stmt.execute();
     }
   }
