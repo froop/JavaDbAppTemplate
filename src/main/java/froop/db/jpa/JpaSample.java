@@ -9,16 +9,15 @@ import java.util.HashMap;
 import java.util.Optional;
 
 public class JpaSample {
+  private static EntityManagerFactory FACTORY = Persistence.createEntityManagerFactory("jpa-sample", createDbSetting());
 
   public Optional<String> selectNameById(long id) {
-    EntityManagerFactory factory = Persistence.createEntityManagerFactory("jpa-sample", createDbSetting());
-    EntityManager manager = factory.createEntityManager();
+    EntityManager manager = FACTORY.createEntityManager();
     try {
       Sample res = manager.find(Sample.class, id);
       return Optional.ofNullable(res.getName());
     } finally {
       manager.close();
-      factory.close();
     }
   }
 
