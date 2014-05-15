@@ -11,10 +11,8 @@ public class Sample implements Serializable {
   private static final long serialVersionUID = 1L;
 
   @Id
-  @Column
   private long id;
 
-  @Column
   private String name;
 
   protected Sample() {}
