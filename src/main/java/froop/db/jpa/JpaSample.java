@@ -8,18 +8,16 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import java.util.HashMap;
 import java.util.Optional;
+import java.util.function.Function;
 
 public class JpaSample {
   private static EntityManagerFactory FACTORY = Persistence.createEntityManagerFactory("jpa-sample", createDbSetting());
 
   public Optional<String> selectNameById(long id) {
-    EntityManager manager = FACTORY.createEntityManager();
-    try {
+    return querySingle(manager -> {
       Sample entity = manager.find(Sample.class, id);
-      return Optional.ofNullable(entity.getName());
-    } finally {
-      manager.close();
-    }
+      return entity.getName();
+    });
   }
 
   public void update(long id, String name) {
@@ -40,5 +38,15 @@ public class JpaSample {
     HashMap<String, String> settings = new HashMap<>();
     settings.put(PersistenceUnitProperties.JDBC_URL, "jdbc:derby:data/derby/sample");
     return settings;
+  }
+
+  private <R> Optional<R> querySingle(Function<EntityManager, R> function) {
+    EntityManager manager = FACTORY.createEntityManager();
+    try {
+      R res = function.apply(manager);
+      return Optional.ofNullable(res);
+    } finally {
+      manager.close();
+    }
   }
 }
