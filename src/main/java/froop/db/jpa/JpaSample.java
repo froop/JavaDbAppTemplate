@@ -1,5 +1,6 @@
 package froop.db.jpa;
 
+import froop.db.jpa.entity.Sample;
 import org.eclipse.persistence.config.PersistenceUnitProperties;
 
 import javax.persistence.EntityManager;

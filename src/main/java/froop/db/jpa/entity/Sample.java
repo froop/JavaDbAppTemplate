@@ -1,4 +1,4 @@
-package froop.db.jpa;
+package froop.db.jpa.entity;
 
 import lombok.Data;
 
