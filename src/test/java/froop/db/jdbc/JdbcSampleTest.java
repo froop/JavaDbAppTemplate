@@ -1,6 +1,6 @@
 package froop.db.jdbc;
 
-import froop.db.testutil.DerbyDBUnit;
+import froop.db.test_common.DerbyDBUnit;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;

@@ -1,4 +1,4 @@
-package froop.db.testutil;
+package froop.db.test_common;
 
 import org.dbunit.IDatabaseTester;
 import org.dbunit.IOperationListener;
