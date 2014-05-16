@@ -41,22 +41,25 @@ public class JpaSample implements SampleData {
   }
 
   private <R> Optional<R> querySingle(Function<EntityManager, R> function) {
-    EntityManager manager = FACTORY.createEntityManager();
-    try {
-      R res = function.apply(manager);
-      return Optional.ofNullable(res);
-    } finally {
-      manager.close();
-    }
+    R res = execute(function);
+    return Optional.ofNullable(res);
   }
 
   private void update(Consumer<EntityManager> consumer) {
+    execute(manager -> {
+      consumer.accept(manager);
+      return null;
+    });
+  }
+
+  private <R> R execute(Function<EntityManager, R> function) {
     EntityManager manager = FACTORY.createEntityManager();
     try {
       EntityTransaction tran = manager.getTransaction();
       tran.begin();
-      consumer.accept(manager);
+      R res = function.apply(manager);
       tran.commit();
+      return res;
     } finally {
       manager.close();
     }
