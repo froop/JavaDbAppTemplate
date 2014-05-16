@@ -29,7 +29,7 @@ public class JdbcSampleTest {
 
   @Test
   public void testSelectNameById() throws SQLException {
-    assertThat(target.selectNameById(1).get(), is("name1"));
+    assertThat(target.queryNameById(1).get(), is("name1"));
   }
 
   @Test

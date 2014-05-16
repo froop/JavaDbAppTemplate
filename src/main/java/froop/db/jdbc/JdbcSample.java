@@ -14,7 +14,7 @@ public class JdbcSample implements SampleData {
   private static final String SQL_UPDATE = "UPDATE sample SET name=? WHERE id=?";
 
   @Override
-  public Optional<String> selectNameById(long id) {
+  public Optional<String> queryNameById(long id) {
     try {
       try (Connection conn = DriverManager.getConnection(DB_URL);
            PreparedStatement stmt = conn.prepareStatement(SQL_SELECT)) {

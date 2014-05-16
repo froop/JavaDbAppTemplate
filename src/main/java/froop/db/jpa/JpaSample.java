@@ -18,7 +18,7 @@ public class JpaSample implements SampleData {
   private static EntityManagerFactory FACTORY = Persistence.createEntityManagerFactory("jpa-sample", createDbSetting());
 
   @Override
-  public Optional<String> selectNameById(long id) {
+  public Optional<String> queryNameById(long id) {
     return querySingle(manager -> {
       Sample entity = manager.find(Sample.class, id);
       return entity.getName();
