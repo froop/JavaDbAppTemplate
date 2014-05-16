@@ -28,7 +28,7 @@ public class JdbcSampleTest {
   }
 
   @Test
-  public void testSelectNameById() throws SQLException {
+  public void testQueryNameById() throws SQLException {
     assertThat(target.queryNameById(1).get(), is("name1"));
   }
 
