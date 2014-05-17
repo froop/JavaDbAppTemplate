@@ -31,18 +31,15 @@ public class JpaSample implements SampleData {
   @Override
   public List<String> queryAll() {
     return execute(manager -> {
-//      TypedQuery<Sample> query = manager.createQuery(
-//          "FROM Sample s ORDER BY s.name", Sample.class);
-      TypedQuery<Sample> query = manager.createQuery(buildCriteriaQuery(manager.getCriteriaBuilder()));
-      List<Sample> result = query.getResultList();
-      return result.stream().map(Sample::getName).collect(Collectors.toList());
+//      List<Sample> rawList = manager.createQuery(
+//          "FROM Sample s ORDER BY s.name", Sample.class).getResultList();
+      List<Sample> entities = queryEntities(manager, builder -> {
+        CriteriaQuery<Sample> query = builder.createQuery(Sample.class);
+        Root<Sample> root = query.from(Sample.class);
+        return query.orderBy(builder.asc(root.get(Sample_.name)));
+      });
+      return entities.stream().map(Sample::getName).collect(Collectors.toList());
     });
-  }
-
-  private CriteriaQuery<Sample> buildCriteriaQuery(CriteriaBuilder builder) {
-    CriteriaQuery<Sample> query = builder.createQuery(Sample.class);
-    Root<Sample> root = query.from(Sample.class);
-    return query.orderBy(builder.asc(root.get(Sample_.name)));
   }
 
   @Override
@@ -60,6 +57,11 @@ public class JpaSample implements SampleData {
       entity.setName(name);
       manager.persist(entity);
     });
+  }
+
+  private <E> List<E> queryEntities(EntityManager manager, Function<CriteriaBuilder, CriteriaQuery<E>> function) {
+    CriteriaQuery<E> query = function.apply(manager.getCriteriaBuilder());
+    return manager.createQuery(query).getResultList();
   }
 
   private <R> Optional<R> querySingle(Function<EntityManager, R> function) {
