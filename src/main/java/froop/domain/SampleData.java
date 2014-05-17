@@ -7,7 +7,7 @@ public interface SampleData {
 
   List<String> queryAll();
 
-  Optional<String> queryNameById(long id);
+  Optional<String> queryNameById(int id);
 
-  void update(long id, String name);
+  void update(int id, String name);
 }

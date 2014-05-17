@@ -1,7 +1,7 @@
 package froop.db.jpa;
 
-import froop.db.jpa.entity.Sample;
-import froop.db.jpa.entity.Sample_;
+import froop.db.jpa.model.Sample;
+import froop.db.jpa.model.Sample_;
 import froop.domain.SampleData;
 
 import javax.persistence.*;
@@ -31,7 +31,7 @@ public class JpaSample implements SampleData {
   }
 
   @Override
-  public Optional<String> queryNameById(long id) {
+  public Optional<String> queryNameById(int id) {
     return executor.querySingle(manager -> {
       Sample entity = manager.find(Sample.class, id);
       return entity.getName();
@@ -39,7 +39,7 @@ public class JpaSample implements SampleData {
   }
 
   @Override
-  public void update(long id, String name) {
+  public void update(int id, String name) {
     executor.update(manager -> {
       Sample entity = manager.find(Sample.class, id);
       entity.setName(name);

@@ -28,9 +28,9 @@ public class JdbcSample implements SampleData {
   }
 
   @Override
-  public Optional<String> queryNameById(long id) {
+  public Optional<String> queryNameById(int id) {
     return executor.query(SQL_SELECT_SINGLE, stmt -> {
-      stmt.setLong(1, id);
+      stmt.setInt(1, id);
     }, rs -> {
       if (rs.next()) {
         return Optional.of(rs.getString("name"));
@@ -41,10 +41,10 @@ public class JdbcSample implements SampleData {
   }
 
   @Override
-  public void update(long id, String name) {
+  public void update(int id, String name) {
     executor.update(SQL_UPDATE, stmt -> {
         stmt.setString(1, name);
-        stmt.setLong(2, id);
+        stmt.setInt(2, id);
     });
   }
 }
