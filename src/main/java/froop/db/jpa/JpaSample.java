@@ -1,10 +1,14 @@
 package froop.db.jpa;
 
 import froop.db.jpa.entity.Sample;
+import froop.db.jpa.entity.Sample_;
 import froop.domain.SampleData;
 import org.eclipse.persistence.config.PersistenceUnitProperties;
 
 import javax.persistence.*;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,8 +31,14 @@ public class JpaSample implements SampleData {
   @Override
   public List<String> queryAll() {
     return execute(manager -> {
-      TypedQuery<Sample> query = manager.createQuery(
-          "SELECT s FROM Sample s ORDER BY s.name", Sample.class);
+//      TypedQuery<Sample> query = manager.createQuery(
+//          "FROM Sample s ORDER BY s.name", Sample.class);
+      CriteriaBuilder builder = manager.getCriteriaBuilder();
+      CriteriaQuery<Sample> cq = builder.createQuery(Sample.class);
+      Root<Sample> from = cq.from(Sample.class);
+      CriteriaQuery<Sample> select = cq.select(from)
+          .orderBy(builder.asc(from.get(Sample_.name)));
+      TypedQuery<Sample> query = manager.createQuery(select);
       List<Sample> result = query.getResultList();
       return result.stream().map(Sample::getName).collect(Collectors.toList());
     });
