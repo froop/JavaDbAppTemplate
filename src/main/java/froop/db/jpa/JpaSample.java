@@ -33,15 +33,16 @@ public class JpaSample implements SampleData {
     return execute(manager -> {
 //      TypedQuery<Sample> query = manager.createQuery(
 //          "FROM Sample s ORDER BY s.name", Sample.class);
-      CriteriaBuilder builder = manager.getCriteriaBuilder();
-      CriteriaQuery<Sample> cq = builder.createQuery(Sample.class);
-      Root<Sample> from = cq.from(Sample.class);
-      CriteriaQuery<Sample> select = cq.select(from)
-          .orderBy(builder.asc(from.get(Sample_.name)));
-      TypedQuery<Sample> query = manager.createQuery(select);
+      TypedQuery<Sample> query = manager.createQuery(buildCriteriaQuery(manager.getCriteriaBuilder()));
       List<Sample> result = query.getResultList();
       return result.stream().map(Sample::getName).collect(Collectors.toList());
     });
+  }
+
+  private CriteriaQuery<Sample> buildCriteriaQuery(CriteriaBuilder builder) {
+    CriteriaQuery<Sample> query = builder.createQuery(Sample.class);
+    Root<Sample> root = query.from(Sample.class);
+    return query.orderBy(builder.asc(root.get(Sample_.name)));
   }
 
   @Override
