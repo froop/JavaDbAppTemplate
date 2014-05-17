@@ -9,3 +9,4 @@ Uses Libraries
 
 * EclipseLink (JPA 2.1)
 * Apache Derby (Database)
+* DbUnit
