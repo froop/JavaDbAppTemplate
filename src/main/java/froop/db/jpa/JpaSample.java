@@ -32,12 +32,13 @@ public class JpaSample implements SampleData {
   public List<String> queryAll() {
 //      List<Sample> entities = manager.createQuery(
 //          "FROM Sample s ORDER BY s.name", Sample.class).getResultList();
-    List<Sample> entities = queryEntities(builder -> {
+    return queryEntities(builder -> {
       CriteriaQuery<Sample> query = builder.createQuery(Sample.class);
       Root<Sample> root = query.from(Sample.class);
       return query.orderBy(builder.asc(root.get(Sample_.name)));
-    });
-    return entities.stream().map(Sample::getName).collect(Collectors.toList());
+    }).stream()
+        .map(Sample::getName)
+        .collect(Collectors.toList());
   }
 
   @Override
