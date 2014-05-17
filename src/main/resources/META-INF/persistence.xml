@@ -5,5 +5,10 @@
   <persistence-unit name="jpa-sample">
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
     <class>froop.db.jpa.entity.Sample</class>
+    <properties>
+      <property name="javax.persistence.jdbc.url" value="jdbc:derby:data/derby/sample" />
+      <property name="javax.persistence.jdbc.user" value="" />
+      <property name="javax.persistence.jdbc.password" value="" />
+    </properties>
   </persistence-unit>
 </persistence>

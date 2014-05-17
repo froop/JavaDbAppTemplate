@@ -3,15 +3,12 @@ package froop.db.jpa;
 import froop.db.jpa.entity.Sample;
 import froop.db.jpa.entity.Sample_;
 import froop.domain.SampleData;
-import org.eclipse.persistence.config.PersistenceUnitProperties;
 
 import javax.persistence.*;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -21,15 +18,8 @@ import java.util.stream.Collectors;
  * JPA (Java Persistence API) 2.1 を使ってDBにアクセスするサンプル.
  */
 public class JpaSample implements SampleData {
-  private static final String DB_URL = "jdbc:derby:data/derby/sample";
   private static final EntityManagerFactory FACTORY =
-      Persistence.createEntityManagerFactory("jpa-sample", createDbSetting());
-
-  private static Map<String, String> createDbSetting() {
-    HashMap<String, String> settings = new HashMap<>();
-    settings.put(PersistenceUnitProperties.JDBC_URL, DB_URL);
-    return settings;
-  }
+      Persistence.createEntityManagerFactory("jpa-sample");
 
   @Override
   public List<String> queryAll() {
