@@ -4,16 +4,14 @@ import froop.db.jpa.entity.Sample;
 import froop.domain.SampleData;
 import org.eclipse.persistence.config.PersistenceUnitProperties;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
-import javax.persistence.Persistence;
+import javax.persistence.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class JpaSample implements SampleData {
   private static final String DB_URL = "jdbc:derby:data/derby/sample";
@@ -28,8 +26,12 @@ public class JpaSample implements SampleData {
 
   @Override
   public List<String> queryAll() {
-    // TODO
-    return null;
+    return execute(manager -> {
+      TypedQuery<Sample> query = manager.createQuery(
+          "SELECT s FROM Sample s ORDER BY s.name", Sample.class);
+      List<Sample> result = query.getResultList();
+      return result.stream().map(Sample::getName).collect(Collectors.toList());
+    });
   }
 
   @Override
