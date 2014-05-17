@@ -37,10 +37,10 @@ public class JdbcSample implements SampleData {
     });
   }
 
-  private void executeUpdate(String sqlString, UpdateSqlSetupper executor) {
+  private void executeUpdate(String sqlString, StatementSetter setter) {
     execute(conn -> {
       try (PreparedStatement statement = conn.prepareStatement(sqlString)) {
-        executor.setup(statement);
+        setter.setup(statement);
         statement.execute();
         return null;
       }
@@ -48,7 +48,7 @@ public class JdbcSample implements SampleData {
   }
 
   @FunctionalInterface
-  private static interface UpdateSqlSetupper {
+  private static interface StatementSetter {
     void setup(PreparedStatement statement) throws SQLException;
   }
 
