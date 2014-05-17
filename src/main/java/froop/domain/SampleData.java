@@ -7,7 +7,7 @@ public interface SampleData {
 
   List<SampleValue> queryAll();
 
-  Optional<String> queryNameById(int id);
+  Optional<SampleValue> queryById(int id);
 
   void update(SampleValue value);
 }

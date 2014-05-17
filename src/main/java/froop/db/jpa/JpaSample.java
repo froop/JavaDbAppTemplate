@@ -28,14 +28,14 @@ public class JpaSample implements SampleData {
       CriteriaQuery<Sample> query = builder.createQuery(Sample.class);
       Root<Sample> root = query.from(Sample.class);
       return query.orderBy(builder.asc(root.get(Sample_.name)));
-    }, entity -> SampleValue.of(entity.getId(), entity.getName()));
+    }, this::toValue);
   }
 
   @Override
-  public Optional<String> queryNameById(int id) {
+  public Optional<SampleValue> queryById(int id) {
     return executor.querySingle(manager -> {
       Sample entity = manager.find(Sample.class, id);
-      return entity.getName();
+      return toValue(entity);
     });
   }
 
@@ -46,5 +46,9 @@ public class JpaSample implements SampleData {
       entity.setName(value.getName());
       manager.persist(entity);
     });
+  }
+
+  private SampleValue toValue(Sample entity) {
+    return SampleValue.of(entity.getId(), entity.getName());
   }
 }

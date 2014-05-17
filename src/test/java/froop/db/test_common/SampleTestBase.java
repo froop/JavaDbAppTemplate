@@ -30,8 +30,8 @@ public abstract class SampleTestBase {
   }
 
   @Test
-  public void testQueryNameById() throws SQLException {
-    assertThat(target.queryNameById(1).get(), is("name1"));
+  public void testQueryById() throws SQLException {
+    assertThat(target.queryById(1).get(), is(SampleValue.of(1, "name1")));
   }
 
   @Test
