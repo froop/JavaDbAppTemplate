@@ -31,25 +31,25 @@ public class JdbcSample implements SampleData {
 
   @Override
   public void update(long id, String name) {
-    executeUpdate(conn -> {
-      try (PreparedStatement stmt = conn.prepareStatement(SQL_UPDATE)) {
+    executeUpdate(SQL_UPDATE, stmt -> {
         stmt.setString(1, name);
         stmt.setLong(2, id);
-        stmt.execute();
+    });
+  }
+
+  private void executeUpdate(String sqlString, UpdateSqlSetupper executor) {
+    execute(conn -> {
+      try (PreparedStatement statement = conn.prepareStatement(sqlString)) {
+        executor.setup(statement);
+        statement.execute();
+        return null;
       }
     });
   }
 
-  private void executeUpdate(UpdateSqlExecutor executor) {
-    execute(conn -> {
-      executor.execute(conn);
-      return null;
-    });
-  }
-
   @FunctionalInterface
-  private static interface UpdateSqlExecutor {
-    void execute(Connection conn) throws SQLException;
+  private static interface UpdateSqlSetupper {
+    void setup(PreparedStatement statement) throws SQLException;
   }
 
   private <R> R execute(SqlExecutor<R> executor) {
