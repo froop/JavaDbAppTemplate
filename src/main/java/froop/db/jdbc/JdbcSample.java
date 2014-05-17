@@ -15,16 +15,13 @@ public class JdbcSample implements SampleData {
 
   @Override
   public Optional<String> queryNameById(long id) {
-    return execute(conn -> {
-      try (PreparedStatement stmt = conn.prepareStatement(SQL_SELECT)) {
-        stmt.setLong(1, id);
-        try (ResultSet rs = stmt.executeQuery()) {
-          if (rs.next()) {
-            return Optional.of(rs.getString("name"));
-          } else {
-            return Optional.empty();
-          }
-        }
+    return executeQuery(SQL_SELECT, stmt -> {
+      stmt.setLong(1, id);
+    }, rs -> {
+      if (rs.next()) {
+        return Optional.of(rs.getString("name"));
+      } else {
+        return Optional.empty();
       }
     });
   }
@@ -37,10 +34,22 @@ public class JdbcSample implements SampleData {
     });
   }
 
+  private <R> R executeQuery(String sqlString, StatementSetter setter, ResultGetter<R> getter) {
+    return execute(conn -> {
+      try (PreparedStatement statement = conn.prepareStatement(sqlString)) {
+        setter.accept(statement);
+        statement.execute();
+        try (ResultSet resultSet = statement.executeQuery()) {
+          return getter.apply(resultSet);
+        }
+      }
+    });
+  }
+
   private void executeUpdate(String sqlString, StatementSetter setter) {
     execute(conn -> {
       try (PreparedStatement statement = conn.prepareStatement(sqlString)) {
-        setter.setup(statement);
+        setter.accept(statement);
         statement.execute();
         return null;
       }
@@ -49,7 +58,12 @@ public class JdbcSample implements SampleData {
 
   @FunctionalInterface
   private static interface StatementSetter {
-    void setup(PreparedStatement statement) throws SQLException;
+    void accept(PreparedStatement statement) throws SQLException;
+  }
+
+  @FunctionalInterface
+  private static interface ResultGetter<R> {
+    R apply(ResultSet resultSet) throws SQLException;
   }
 
   private <R> R execute(SqlExecutor<R> executor) {
