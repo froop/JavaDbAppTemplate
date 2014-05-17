@@ -15,7 +15,15 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 public class JpaSample implements SampleData {
-  private static EntityManagerFactory FACTORY = Persistence.createEntityManagerFactory("jpa-sample", createDbSetting());
+  private static final String DB_URL = "jdbc:derby:data/derby/sample";
+  private static final EntityManagerFactory FACTORY =
+      Persistence.createEntityManagerFactory("jpa-sample", createDbSetting());
+
+  private static Map<String, String> createDbSetting() {
+    HashMap<String, String> settings = new HashMap<>();
+    settings.put(PersistenceUnitProperties.JDBC_URL, DB_URL);
+    return settings;
+  }
 
   @Override
   public Optional<String> queryNameById(long id) {
@@ -32,12 +40,6 @@ public class JpaSample implements SampleData {
       entity.setName(name);
       manager.persist(entity);
     });
-  }
-
-  private static Map<String, String> createDbSetting() {
-    HashMap<String, String> settings = new HashMap<>();
-    settings.put(PersistenceUnitProperties.JDBC_URL, "jdbc:derby:data/derby/sample");
-    return settings;
   }
 
   private <R> Optional<R> querySingle(Function<EntityManager, R> function) {
