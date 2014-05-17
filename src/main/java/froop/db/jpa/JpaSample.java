@@ -32,13 +32,11 @@ public class JpaSample implements SampleData {
   public List<String> queryAll() {
 //      List<Sample> entities = manager.createQuery(
 //          "FROM Sample s ORDER BY s.name", Sample.class).getResultList();
-    return queryEntities(builder -> {
+    return queryMulti(builder -> {
       CriteriaQuery<Sample> query = builder.createQuery(Sample.class);
       Root<Sample> root = query.from(Sample.class);
       return query.orderBy(builder.asc(root.get(Sample_.name)));
-    }).stream()
-        .map(Sample::getName)
-        .collect(Collectors.toList());
+    }, Sample::getName);
   }
 
   @Override
@@ -56,6 +54,11 @@ public class JpaSample implements SampleData {
       entity.setName(name);
       manager.persist(entity);
     });
+  }
+
+  private <T, R> List<R> queryMulti(
+      Function<CriteriaBuilder, CriteriaQuery<T>> queryBuilder, Function<T, R> resultMapper) {
+    return queryEntities(queryBuilder).stream().map(resultMapper).collect(Collectors.toList());
   }
 
   private <E> List<E> queryEntities(Function<CriteriaBuilder, CriteriaQuery<E>> function) {
