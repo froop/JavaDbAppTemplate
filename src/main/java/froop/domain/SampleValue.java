@@ -1,23 +1,14 @@
 package froop.domain;
 
+import lombok.NonNull;
+import lombok.Value;
+
+@Value(staticConstructor = "of")
 public class SampleValue {
+
+  @NonNull
   private final int id;
+
+  @NonNull
   private final String name;
-
-  public static SampleValue of(int id, String name) {
-    return new SampleValue(id, name);
-  }
-
-  private SampleValue(int id, String name) {
-    this.id = id;
-    this.name = name;
-  }
-
-  public int getId() {
-    return id;
-  }
-
-  public String getName() {
-    return name;
-  }
 }
