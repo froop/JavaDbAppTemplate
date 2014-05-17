@@ -17,6 +17,9 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+/**
+ * JPA (Java Persistence API) 2.1 を使ってDBにアクセスするサンプル.
+ */
 public class JpaSample implements SampleData {
   private static final String DB_URL = "jdbc:derby:data/derby/sample";
   private static final EntityManagerFactory FACTORY =
