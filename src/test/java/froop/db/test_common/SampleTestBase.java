@@ -1,6 +1,7 @@
 package froop.db.test_common;
 
 import froop.domain.SampleData;
+import froop.domain.SampleValue;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -24,7 +25,8 @@ public abstract class SampleTestBase {
 
   @Test
   public void testQueryAll() throws SQLException {
-    assertThat(target.queryAll(), is(Arrays.asList("name1", "name2")));
+    assertThat(target.queryAll(), is(Arrays.asList(
+        SampleValue.of(1, "name1"), SampleValue.of(2, "name2"))));
   }
 
   @Test

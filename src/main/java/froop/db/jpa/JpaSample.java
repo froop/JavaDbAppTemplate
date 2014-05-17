@@ -3,6 +3,7 @@ package froop.db.jpa;
 import froop.db.jpa.model.Sample;
 import froop.db.jpa.model.Sample_;
 import froop.domain.SampleData;
+import froop.domain.SampleValue;
 
 import javax.persistence.*;
 import javax.persistence.criteria.CriteriaQuery;
@@ -20,14 +21,14 @@ public class JpaSample implements SampleData {
   private final JpaSqlExecutor executor = new JpaSqlExecutor(FACTORY);
 
   @Override
-  public List<String> queryAll() {
+  public List<SampleValue> queryAll() {
 //      List<Sample> entities = manager.createQuery(
 //          "FROM Sample s ORDER BY s.name", Sample.class).getResultList();
     return executor.queryMulti(builder -> {
       CriteriaQuery<Sample> query = builder.createQuery(Sample.class);
       Root<Sample> root = query.from(Sample.class);
       return query.orderBy(builder.asc(root.get(Sample_.name)));
-    }, Sample::getName);
+    }, entity -> SampleValue.of(entity.getId(), entity.getName()));
   }
 
   @Override

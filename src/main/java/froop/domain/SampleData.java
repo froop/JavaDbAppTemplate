@@ -5,7 +5,7 @@ import java.util.Optional;
 
 public interface SampleData {
 
-  List<String> queryAll();
+  List<SampleValue> queryAll();
 
   Optional<String> queryNameById(int id);
 
