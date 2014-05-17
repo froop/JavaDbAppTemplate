@@ -36,7 +36,7 @@ public abstract class SampleTestBase {
 
   @Test
   public void testUpdate() throws Exception {
-    target.update(1, "name1b");
+    target.update(SampleValue.of(1, "name1b"));
 
     dbUnit.assertEqualsTable(toStream("SampleUpdate.xml"), "sample");
   }

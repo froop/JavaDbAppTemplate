@@ -9,5 +9,5 @@ public interface SampleData {
 
   Optional<String> queryNameById(int id);
 
-  void update(int id, String name);
+  void update(SampleValue value);
 }

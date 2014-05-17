@@ -40,10 +40,10 @@ public class JpaSample implements SampleData {
   }
 
   @Override
-  public void update(int id, String name) {
+  public void update(SampleValue value) {
     executor.update(manager -> {
-      Sample entity = manager.find(Sample.class, id);
-      entity.setName(name);
+      Sample entity = manager.find(Sample.class, value.getId());
+      entity.setName(value.getName());
       manager.persist(entity);
     });
   }
