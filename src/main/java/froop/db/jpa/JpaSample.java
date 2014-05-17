@@ -9,6 +9,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -23,6 +24,12 @@ public class JpaSample implements SampleData {
     HashMap<String, String> settings = new HashMap<>();
     settings.put(PersistenceUnitProperties.JDBC_URL, DB_URL);
     return settings;
+  }
+
+  @Override
+  public List<String> queryAll() {
+    // TODO
+    return null;
   }
 
   @Override

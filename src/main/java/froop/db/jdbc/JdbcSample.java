@@ -3,6 +3,8 @@ package froop.db.jdbc;
 import froop.domain.SampleData;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -10,12 +12,24 @@ import java.util.Optional;
  */
 public class JdbcSample implements SampleData {
   private static final String DB_URL = "jdbc:derby:data/derby/sample";
-  private static final String SQL_SELECT = "SELECT name FROM sample WHERE id=?";
+  private static final String SQL_SELECT_MULTI = "SELECT name FROM sample ORDER BY name";
+  private static final String SQL_SELECT_SINGLE = "SELECT name FROM sample WHERE id=?";
   private static final String SQL_UPDATE = "UPDATE sample SET name=? WHERE id=?";
 
   @Override
+  public List<String> queryAll() {
+    return executeQuery(SQL_SELECT_MULTI, stmt -> {}, rs -> {
+      List<String> list = new ArrayList<>();
+      while (rs.next()) {
+        list.add(rs.getString("name"));
+      }
+      return list;
+    });
+  }
+
+  @Override
   public Optional<String> queryNameById(long id) {
-    return executeQuery(SQL_SELECT, stmt -> {
+    return executeQuery(SQL_SELECT_SINGLE, stmt -> {
       stmt.setLong(1, id);
     }, rs -> {
       if (rs.next()) {
