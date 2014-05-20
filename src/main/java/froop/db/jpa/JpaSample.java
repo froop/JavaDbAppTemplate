@@ -15,16 +15,19 @@ import java.util.Optional;
  * JPA (Java Persistence API) 2.1 を使ってDBにアクセスするサンプル.
  */
 public class JpaSample implements SampleData {
-  private static final EntityManagerFactory FACTORY =
-      Persistence.createEntityManagerFactory("jpa-sample");
 
-  private final JpaSqlExecutor executor = new JpaSqlExecutor(FACTORY);
+  @PersistenceContext(unitName = "sample")
+  private final EntityManager entityManager;
+
+  public JpaSample(EntityManager entityManager) {
+    this.entityManager = entityManager;
+  }
 
   @Override
   public List<SampleValue> queryAll() {
 //      List<Sample> entities = manager.createQuery(
 //          "FROM Sample s ORDER BY s.name", Sample.class).getResultList();
-    return executor.queryMulti(builder -> {
+    return getExecutor().queryMulti(builder -> {
       CriteriaQuery<Sample> query = builder.createQuery(Sample.class);
       Root<Sample> root = query.from(Sample.class);
       return query.orderBy(builder.asc(root.get(Sample_.name)));
@@ -33,7 +36,7 @@ public class JpaSample implements SampleData {
 
   @Override
   public Optional<SampleValue> queryById(int id) {
-    return executor.querySingle(manager -> {
+    return getExecutor().querySingle(manager -> {
       Sample entity = manager.find(Sample.class, id);
       return toValue(entity);
     });
@@ -41,11 +44,15 @@ public class JpaSample implements SampleData {
 
   @Override
   public void update(SampleValue value) {
-    executor.update(manager -> {
+    getExecutor().update(manager -> {
       Sample entity = manager.find(Sample.class, value.getId());
       entity.setName(value.getName());
       manager.persist(entity);
     });
+  }
+
+  private JpaSqlExecutor getExecutor() {
+    return new JpaSqlExecutor(entityManager);
   }
 
   private SampleValue toValue(Sample entity) {

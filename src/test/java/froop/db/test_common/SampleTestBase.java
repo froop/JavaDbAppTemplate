@@ -36,9 +36,13 @@ public abstract class SampleTestBase {
 
   @Test
   public void testUpdate() throws Exception {
-    target.update(SampleValue.of(1, "name1b"));
+    doUpdate();
 
     dbUnit.assertEqualsTable(toStream("SampleUpdate.xml"), "sample");
+  }
+
+  protected void doUpdate() {
+    target.update(SampleValue.of(1, "name1b"));
   }
 
   private InputStream toStream(String fileName) {

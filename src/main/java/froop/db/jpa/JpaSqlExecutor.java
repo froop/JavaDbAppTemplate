@@ -1,8 +1,6 @@
 package froop.db.jpa;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import java.util.List;
@@ -12,10 +10,11 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class JpaSqlExecutor {
-  private final EntityManagerFactory factory;
 
-  public JpaSqlExecutor(EntityManagerFactory factory) {
-    this.factory = factory;
+  private final EntityManager entityManager;
+
+  public JpaSqlExecutor(EntityManager entityManager) {
+    this.entityManager = entityManager;
   }
 
   public <T, R> List<R> queryMulti(
@@ -43,15 +42,6 @@ public class JpaSqlExecutor {
   }
 
   private <R> R execute(Function<EntityManager, R> function) {
-    EntityManager manager = factory.createEntityManager();
-    try {
-      EntityTransaction tran = manager.getTransaction();
-      tran.begin();
-      R res = function.apply(manager);
-      tran.commit();
-      return res;
-    } finally {
-      manager.close();
-    }
+    return function.apply(entityManager);
   }
 }
