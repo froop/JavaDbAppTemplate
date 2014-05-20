@@ -16,11 +16,7 @@ import java.util.Optional;
  */
 public class JpaSample implements SampleData {
 
-  @PersistenceContext(unitName = "jpa-sample")
-  private EntityManager entityManager;
-
-  public JpaSample() {
-  }
+  private final EntityManager entityManager;
 
   public JpaSample(EntityManager entityManager) {
     this.entityManager = entityManager;
