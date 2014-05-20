@@ -30,7 +30,7 @@ public class JpaSample implements SampleData {
   public List<SampleValue> queryAll() {
 //      List<Sample> entities = manager.createQuery(
 //          "FROM Sample s ORDER BY s.name", Sample.class).getResultList();
-    return new JpaSqlExecutor(entityManager).queryMulti(builder -> {
+    return new JpaQueryExecutor(entityManager).queryMulti(builder -> {
       CriteriaQuery<Sample> query = builder.createQuery(Sample.class);
       Root<Sample> root = query.from(Sample.class);
       return query.orderBy(builder.asc(root.get(Sample_.name)));
