@@ -17,7 +17,10 @@ import java.util.Optional;
 public class JpaSample implements SampleData {
 
   @PersistenceContext(unitName = "sample")
-  private final EntityManager entityManager;
+  private EntityManager entityManager;
+
+  public JpaSample() {
+  }
 
   public JpaSample(EntityManager entityManager) {
     this.entityManager = entityManager;
@@ -27,7 +30,7 @@ public class JpaSample implements SampleData {
   public List<SampleValue> queryAll() {
 //      List<Sample> entities = manager.createQuery(
 //          "FROM Sample s ORDER BY s.name", Sample.class).getResultList();
-    return getExecutor().queryMulti(builder -> {
+    return new JpaSqlExecutor(entityManager).queryMulti(builder -> {
       CriteriaQuery<Sample> query = builder.createQuery(Sample.class);
       Root<Sample> root = query.from(Sample.class);
       return query.orderBy(builder.asc(root.get(Sample_.name)));
@@ -36,23 +39,15 @@ public class JpaSample implements SampleData {
 
   @Override
   public Optional<SampleValue> queryById(int id) {
-    return getExecutor().querySingle(manager -> {
-      Sample entity = manager.find(Sample.class, id);
-      return toValue(entity);
-    });
+    Sample entity = entityManager.find(Sample.class, id);
+    return Optional.ofNullable(toValue(entity));
   }
 
   @Override
   public void update(SampleValue value) {
-    getExecutor().update(manager -> {
-      Sample entity = manager.find(Sample.class, value.getId());
-      entity.setName(value.getName());
-      manager.persist(entity);
-    });
-  }
-
-  private JpaSqlExecutor getExecutor() {
-    return new JpaSqlExecutor(entityManager);
+    Sample entity = entityManager.find(Sample.class, value.getId());
+    entity.setName(value.getName());
+    entityManager.persist(entity);
   }
 
   private SampleValue toValue(Sample entity) {
