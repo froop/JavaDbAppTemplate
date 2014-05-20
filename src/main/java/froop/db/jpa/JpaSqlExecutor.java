@@ -23,25 +23,15 @@ public class JpaSqlExecutor {
   }
 
   private <E> List<E> queryEntities(Function<CriteriaBuilder, CriteriaQuery<E>> function) {
-    return execute(manager -> {
-      CriteriaQuery<E> query = function.apply(manager.getCriteriaBuilder());
-      return manager.createQuery(query).getResultList();
-    });
+    CriteriaQuery<E> query = function.apply(entityManager.getCriteriaBuilder());
+    return entityManager.createQuery(query).getResultList();
   }
 
   public <R> Optional<R> querySingle(Function<EntityManager, R> function) {
-    R res = execute(function);
-    return Optional.ofNullable(res);
+    return Optional.ofNullable(function.apply(entityManager));
   }
 
   public void update(Consumer<EntityManager> consumer) {
-    execute(manager -> {
-      consumer.accept(manager);
-      return null;
-    });
-  }
-
-  private <R> R execute(Function<EntityManager, R> function) {
-    return function.apply(entityManager);
+    consumer.accept(entityManager);
   }
 }
