@@ -73,6 +73,17 @@ public class JpaSampleTest {
     dbUnit.assertEqualsTable(toStream("SampleUpdate.xml"), "sample");
   }
 
+  @Test
+  public void testUpdate_NotExists() throws Exception {
+    EntityTransaction tran = entityManager.getTransaction();
+
+    tran.begin();
+    target.update(SampleValue.of(9, "name9"));
+    tran.commit();
+
+    dbUnit.assertEqualsTable(toStream("Sample.xml"), "sample");
+  }
+
   private InputStream toStream(String fileName) {
     return getClass().getResourceAsStream(fileName);
   }

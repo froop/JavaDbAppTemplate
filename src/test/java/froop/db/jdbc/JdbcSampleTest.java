@@ -54,6 +54,13 @@ public class JdbcSampleTest {
     dbUnit.assertEqualsTable(toStream("SampleUpdate.xml"), "sample");
   }
 
+  @Test
+  public void testUpdate_NotExists() throws Exception {
+    target.update(SampleValue.of(9, "name9"));
+
+    dbUnit.assertEqualsTable(toStream("Sample.xml"), "sample");
+  }
+
   private InputStream toStream(String fileName) {
     return getClass().getResourceAsStream(fileName);
   }

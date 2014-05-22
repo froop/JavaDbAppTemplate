@@ -42,8 +42,10 @@ public class JpaSample implements SampleData {
   @Override
   public void update(SampleValue value) {
     Sample entity = entityManager.find(Sample.class, value.getId());
-    entity.setName(value.getName());
-    entityManager.persist(entity);
+    if (entity != null) {
+      entity.setName(value.getName());
+      entityManager.persist(entity);
+    }
   }
 
   private SampleValue toValue(Sample entity) {
