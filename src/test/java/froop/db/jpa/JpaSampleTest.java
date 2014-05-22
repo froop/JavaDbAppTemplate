@@ -17,6 +17,7 @@ import java.sql.SQLException;
 import java.util.Arrays;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 
 public class JpaSampleTest {
@@ -54,6 +55,11 @@ public class JpaSampleTest {
   @Test
   public void testQueryById() throws SQLException {
     assertThat(target.queryById(1).get(), is(SampleValue.of(1, "name1")));
+  }
+
+  @Test
+  public void testQueryById_NotExists() throws SQLException {
+    assertFalse(target.queryById(9).isPresent());
   }
 
   @Test

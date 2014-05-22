@@ -36,7 +36,7 @@ public class JpaSample implements SampleData {
   @Override
   public Optional<SampleValue> queryById(int id) {
     Sample entity = entityManager.find(Sample.class, id);
-    return Optional.ofNullable(toValue(entity));
+    return Optional.ofNullable(entity).map(this::toValue);
   }
 
   @Override
