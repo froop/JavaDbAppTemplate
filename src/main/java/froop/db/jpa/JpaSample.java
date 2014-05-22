@@ -35,17 +35,20 @@ public class JpaSample implements SampleData {
 
   @Override
   public Optional<SampleValue> queryById(int id) {
-    Sample entity = entityManager.find(Sample.class, id);
-    return Optional.ofNullable(entity).map(this::toValue);
+    return findRaw(id).map(this::toValue);
   }
 
   @Override
   public void update(SampleValue value) {
-    Sample entity = entityManager.find(Sample.class, value.getId());
-    if (entity != null) {
+    findRaw(value.getId()).ifPresent(entity -> {
       entity.setName(value.getName());
       entityManager.persist(entity);
-    }
+    });
+  }
+
+  private Optional<Sample> findRaw(int id) {
+    Sample entity = entityManager.find(Sample.class, id);
+    return Optional.ofNullable(entity);
   }
 
   private SampleValue toValue(Sample entity) {
