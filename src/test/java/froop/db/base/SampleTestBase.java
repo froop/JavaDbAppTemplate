@@ -63,7 +63,7 @@ public abstract class SampleTestBase {
 
   protected abstract void commitTransaction();
 
-  protected InputStream toStream(String fileName) {
-    return getClass().getResourceAsStream(fileName);
+  private InputStream toStream(String fileName) {
+    return SampleTestBase.class.getResourceAsStream(fileName);
   }
 }
