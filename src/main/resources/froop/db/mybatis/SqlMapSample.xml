@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap
+		PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+		"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="sample">
+
+	<typeAlias alias="SampleValue" type="froop.db.mybatis.SampleRaw" />
+
+	<resultMap id="resultMapSample" class="SampleValue">
+		<result property="id" column="id" />
+		<result property="name" column="name" />
+	</resultMap>
+
+	<select id="selectAll" resultMap="resultMapSample">
+		SELECT id, name FROM sample ORDER BY name
+	</select>
+
+	<select id="selectOne" parameterClass="java.lang.Integer"
+		resultMap="resultMapSample">
+		SELECT id, name FROM sample WHERE id = #value#
+	</select>
+
+	<update id="update" parameterClass="SampleValue">
+		UPDATE sample SET name = #name# WHERE id = #id#
+	</update>
+</sqlMap>
