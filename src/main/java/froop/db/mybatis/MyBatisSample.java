@@ -75,6 +75,6 @@ public class MyBatisSample implements SampleData {
   }
 
   private SampleRaw toRaw(SampleValue value) {
-    return new SampleRaw(value.getId(), value.getName());
+    return SampleRaw.of(value.getId(), value.getName());
   }
 }
