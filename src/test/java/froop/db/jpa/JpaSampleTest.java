@@ -25,6 +25,7 @@ public class JpaSampleTest {
       Persistence.createEntityManagerFactory("jpa-sample");
 
   private EntityManager entityManager;
+  private EntityTransaction transaction;
 
   @Rule
   public final DerbyDBUnit dbUnit;
@@ -64,24 +65,29 @@ public class JpaSampleTest {
 
   @Test
   public void testUpdate() throws Exception {
-    EntityTransaction tran = entityManager.getTransaction();
-
-    tran.begin();
+    beginTransaction();
     target.update(SampleValue.of(1, "name1b"));
-    tran.commit();
+    commitTransaction();
 
     dbUnit.assertEqualsTable(toStream("SampleUpdate.xml"), "sample");
   }
 
   @Test
   public void testUpdate_NotExists() throws Exception {
-    EntityTransaction tran = entityManager.getTransaction();
-
-    tran.begin();
+    beginTransaction();
     target.update(SampleValue.of(9, "name9"));
-    tran.commit();
+    commitTransaction();
 
     dbUnit.assertEqualsTable(toStream("Sample.xml"), "sample");
+  }
+
+  private void beginTransaction() {
+    transaction = entityManager.getTransaction();
+    transaction.begin();
+  }
+
+  private void commitTransaction() {
+    transaction.commit();
   }
 
   private InputStream toStream(String fileName) {
