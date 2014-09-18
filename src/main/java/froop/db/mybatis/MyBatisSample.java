@@ -33,13 +33,7 @@ public class MyBatisSample implements SampleData {
   @Override
   public List<SampleValue> queryAll() {
     try {
-      @SuppressWarnings("unchecked")
-      List<SampleRaw> rawList = sqlMap.queryForList("selectAll");
-      List<SampleValue> res = new ArrayList<SampleValue>();
-      for (SampleRaw raw : rawList) {
-        res.add(toValue(raw));
-      }
-      return res;
+      return toValues(sqlMap.queryForList("selectAll"));
     } catch (SQLException e) {
       throw new IllegalStateException(e);
     }
@@ -62,6 +56,15 @@ public class MyBatisSample implements SampleData {
     } catch (SQLException e) {
       throw new IllegalStateException(e);
     }
+  }
+
+  @SuppressWarnings({ "unchecked", "rawtypes" })
+  private List<SampleValue> toValues(List rawList) {
+    List<SampleValue> res = new ArrayList<SampleValue>();
+    for (SampleRaw raw : (List<SampleRaw>) rawList) {
+      res.add(toValue(raw));
+    }
+    return res;
   }
 
   private SampleValue toValue(SampleRaw raw) {
