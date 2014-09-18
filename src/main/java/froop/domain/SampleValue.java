@@ -6,7 +6,6 @@ import lombok.Value;
 @Value(staticConstructor = "of")
 public class SampleValue {
 
-  @NonNull
   private final int id;
 
   @NonNull
